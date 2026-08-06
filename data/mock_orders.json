@@ -1,0 +1,50 @@
+{
+  "ORD-8842": {
+    "order_id": "ORD-8842",
+    "customer_id": "C-001",
+    "item_name": "Glass Jar Blender 600W",
+    "price": 49.99,
+    "order_date": "2026-07-22",
+    "delivery_status": "delivered",
+    "tracking_number": "TRK-771122",
+    "carrier": "BlueDart",
+    "estimated_delivery": "2026-07-25",
+    "warranty_months": 6
+  },
+  "ORD-5521": {
+    "order_id": "ORD-5521",
+    "customer_id": "C-002",
+    "item_name": "Wireless Mechanical Keyboard",
+    "price": 129.99,
+    "order_date": "2026-06-10",
+    "delivery_status": "delivered",
+    "tracking_number": "TRK-550091",
+    "carrier": "Delhivery",
+    "estimated_delivery": "2026-06-15",
+    "warranty_months": 12
+  },
+  "ORD-1187": {
+    "order_id": "ORD-1187",
+    "customer_id": "C-004",
+    "item_name": "Running Shoes - Size 9",
+    "price": 89.99,
+    "order_date": "2026-07-31",
+    "delivery_status": "in_transit",
+    "tracking_number": "TRK-118877",
+    "carrier": "BlueDart",
+    "estimated_delivery": "2026-08-07",
+    "warranty_months": 0
+  },
+  "ORD-3399": {
+    "order_id": "ORD-3399",
+    "customer_id": "C-007",
+    "item_name": "Glass Jar Blender 600W",
+    "price": 59.99,
+    "order_date": "2026-05-01",
+    "delivery_status": "delivered",
+    "tracking_number": "TRK-339912",
+    "carrier": "Delhivery",
+    "estimated_delivery": "2026-05-05",
+    "warranty_months": 12
+  }
+}
