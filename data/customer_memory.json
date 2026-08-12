@@ -1,0 +1,33 @@
+{
+  "C-TEST-01": {
+    "past_tickets": [
+      {
+        "ticket_id": "T-9001",
+        "issue_type": "refund_request",
+        "summary": "Broken blender, wants refund",
+        "recorded_at": "2026-08-07T11:24:07.368109+00:00"
+      },
+      {
+        "ticket_id": "T-9002",
+        "issue_type": "shipping_status",
+        "summary": "Asking where package is",
+        "recorded_at": "2026-08-07T11:24:07.379600+00:00"
+      },
+      {
+        "ticket_id": "T-9001",
+        "issue_type": "refund_request",
+        "summary": "Broken blender, wants refund",
+        "recorded_at": "2026-08-12T05:58:09.250227+00:00"
+      },
+      {
+        "ticket_id": "T-9002",
+        "issue_type": "shipping_status",
+        "summary": "Asking where package is",
+        "recorded_at": "2026-08-12T05:58:09.262888+00:00"
+      }
+    ],
+    "preferences": {
+      "preferred_contact": "email"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "policy-001",
+    "category": "returns",
+    "text": "General merchandise (clothing, home goods, toys) can be returned within 30 days of delivery for a full refund, provided the item is unused and in its original packaging."
+  },
+  {
+    "id": "policy-002",
+    "category": "returns",
+    "text": "Electronics (phones, laptops, headphones, cameras) have a shorter return window of 15 days from delivery due to rapid depreciation. Items must include all original accessories and packaging."
+  },
+  {
+    "id": "policy-003",
+    "category": "returns",
+    "text": "Items marked as final sale or clearance are not eligible for return or refund under any circumstances, except in the case of manufacturing defects."
+  },
+  {
+    "id": "policy-004",
+    "category": "refunds",
+    "text": "Approved refunds are issued to the original payment method within 5-7 business days of the returned item being received and inspected at our warehouse."
+  },
+  {
+    "id": "policy-005",
+    "category": "refunds",
+    "text": "If an item arrives damaged or defective, the customer is eligible for a full refund or free replacement, and does not need to cover return shipping costs."
+  },
+  {
+    "id": "policy-006",
+    "category": "warranty",
+    "text": "All electronics purchased come with a standard 12-month manufacturer warranty covering defects in materials or workmanship, starting from the delivery date."
+  },
+  {
+    "id": "policy-007",
+    "category": "warranty",
+    "text": "Warranty coverage does not include accidental damage, liquid damage, unauthorized repairs, or normal wear and tear. These cases are not eligible for free warranty replacement."
+  },
+  {
+    "id": "policy-008",
+    "category": "warranty",
+    "text": "Small kitchen appliances (blenders, toasters, kettles) carry a 6-month warranty against manufacturing defects, covering motor failure and electrical faults but not accidental breakage."
+  },
+  {
+    "id": "policy-009",
+    "category": "shipping",
+    "text": "Standard shipping typically takes 5-7 business days. If a package has not arrived within 10 business days of the order date, the customer is entitled to a full refund or a free reshipment, their choice."
+  },
+  {
+    "id": "policy-010",
+    "category": "shipping",
+    "text": "During officially announced holiday sale periods, the standard return window is automatically extended by an additional 15 days beyond the normal policy for that item category."
+  },
+  {
+    "id": "policy-011",
+    "category": "refunds",
+    "text": "Refund requests above $500 in value require manual review by a member of the support team before being approved, regardless of return eligibility."
+  }
+]
