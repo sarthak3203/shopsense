@@ -29,5 +29,174 @@
     "preferences": {
       "preferred_contact": "email"
     }
+  },
+  "CUST-1": {
+    "past_tickets": [
+      {
+        "ticket_id": "T-TEST-1",
+        "issue_type": "shipping_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-16T15:56:17.976017+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-1",
+        "issue_type": "shipping_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-16T15:58:37.971464+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-1",
+        "issue_type": "shipping_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-16T15:59:59.562316+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-1",
+        "issue_type": "shipping_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-16T16:01:31.363418+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-1",
+        "issue_type": "shipping_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-16T16:03:41.052865+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-1",
+        "issue_type": "shipping_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-16T16:05:32.750581+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-1",
+        "issue_type": "shipping_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-16T16:09:47.766524+00:00"
+      }
+    ],
+    "preferences": {}
+  },
+  "CUST-2B": {
+    "past_tickets": [
+      {
+        "ticket_id": "T-TEST-2B",
+        "issue_type": "refund_request",
+        "summary": "Auto-resolved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 49.99, 'transaction_id': 'TXN-00439940'}",
+        "recorded_at": "2026-08-16T15:56:19.068856+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-2B",
+        "issue_type": "refund_request",
+        "summary": "Auto-resolved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-9002', 'amount_refunded': 149.99, 'transaction_id': 'TXN-82117379'}",
+        "recorded_at": "2026-08-16T16:05:32.897917+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-2B",
+        "issue_type": "refund_request",
+        "summary": "Auto-resolved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-9002', 'amount_refunded': 149.99, 'transaction_id': 'TXN-39440423'}",
+        "recorded_at": "2026-08-16T16:09:49.687667+00:00"
+      }
+    ],
+    "preferences": {}
+  },
+  "CUST-3": {
+    "past_tickets": [
+      {
+        "ticket_id": "T-TEST-3",
+        "issue_type": "refund_request",
+        "summary": "Auto-resolved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 49.99, 'transaction_id': 'TXN-89084453'}",
+        "recorded_at": "2026-08-16T15:56:19.164106+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-3",
+        "issue_type": "refund_request",
+        "summary": "Auto-resolved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-9002', 'amount_refunded': 149.99, 'transaction_id': 'TXN-10959260'}",
+        "recorded_at": "2026-08-16T16:05:32.956730+00:00"
+      }
+    ],
+    "preferences": {}
+  },
+  "CUST-2": {
+    "past_tickets": [
+      {
+        "ticket_id": "T-TEST-2",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-83838247'}",
+        "recorded_at": "2026-08-16T15:58:38.042672+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-2",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-28683943'}",
+        "recorded_at": "2026-08-16T15:59:59.649712+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-2",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-13233091'}",
+        "recorded_at": "2026-08-16T16:01:31.443024+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-2",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-69148451'}",
+        "recorded_at": "2026-08-16T16:03:41.126275+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-2",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-49306726'}",
+        "recorded_at": "2026-08-16T16:05:32.824452+00:00"
+      },
+      {
+        "ticket_id": "T-TEST-2",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-32591972'}",
+        "recorded_at": "2026-08-16T16:09:48.777123+00:00"
+      }
+    ],
+    "preferences": {}
+  },
+  "CUST-4": {
+    "past_tickets": [
+      {
+        "ticket_id": "T-RESTART",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-46475333'}",
+        "recorded_at": "2026-08-16T15:58:38.217113+00:00"
+      },
+      {
+        "ticket_id": "T-RESTART",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-57593356'}",
+        "recorded_at": "2026-08-16T15:59:59.828415+00:00"
+      },
+      {
+        "ticket_id": "T-RESTART",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-33431986'}",
+        "recorded_at": "2026-08-16T16:01:31.616145+00:00"
+      },
+      {
+        "ticket_id": "T-RESTART",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-35823042'}",
+        "recorded_at": "2026-08-16T16:03:41.295237+00:00"
+      },
+      {
+        "ticket_id": "T-RESTART",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-33689564'}",
+        "recorded_at": "2026-08-16T16:05:34.213923+00:00"
+      },
+      {
+        "ticket_id": "T-RESTART",
+        "issue_type": "refund_request",
+        "summary": "Human-approved \u2014 refund executed: {'found': True, 'success': True, 'action': 'refund', 'order_id': 'ORD-8842', 'amount_refunded': 799.99, 'transaction_id': 'TXN-64915985'}",
+        "recorded_at": "2026-08-16T16:09:51.692051+00:00"
+      }
+    ],
+    "preferences": {}
   }
 }

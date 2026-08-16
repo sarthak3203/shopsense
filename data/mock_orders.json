@@ -3,7 +3,7 @@
     "order_id": "ORD-8842",
     "customer_id": "C-001",
     "item_name": "Glass Jar Blender 600W",
-    "price": 49.99,
+    "price": 799.99,
     "order_date": "2026-07-22",
     "delivery_status": "delivered",
     "tracking_number": "TRK-771122",
@@ -46,5 +46,17 @@
     "carrier": "Delhivery",
     "estimated_delivery": "2026-05-05",
     "warranty_months": 12
+  },
+  "ORD-9002": {
+    "order_id": "ORD-9002",
+    "customer_id": "C-002",
+    "item_name": "Wireless Mouse",
+    "price": 149.99,
+    "order_date": "2026-08-01",
+    "delivery_status": "delivered",
+    "tracking_number": "TRK-990211",
+    "carrier": "BlueDart",
+    "estimated_delivery": "2026-08-04",
+    "warranty_months": 3
   }
 }
