@@ -3,3 +3,6 @@ litellm>=1.52
 python-dotenv>=1.0
 pytest>=8.0
 qdrant-client[fastembed]>=1.11
+langgraph
+langgraph-checkpoint
+langgraph-checkpoint-sqlite
