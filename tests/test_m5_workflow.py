@@ -3,7 +3,8 @@ import tempfile
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.types import Command
 
-from src.langgraph_workflow import build_graph, REFUND_AUTO_APPROVE_THRESHOLD
+from src.langgraph_workflow import build_graph
+from src.escalation_reviewer_agent import REFUND_AUTO_APPROVE_THRESHOLD
 from src.mock_apis import calculate_refund_amount
 
 

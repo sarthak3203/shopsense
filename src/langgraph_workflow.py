@@ -24,10 +24,7 @@ from src.mock_apis import (
 )
 from src.memory_store import get_customer_context, record_ticket
 from src.policy_rag_agent import answer_policy_question
-
-REFUND_AUTO_APPROVE_THRESHOLD = 500.0
-ANGRY_SENTIMENTS = {"angry"}
-CRITICAL_URGENCY = {"critical"}
+from src.escalation_reviewer_agent import review as escalation_review
 
 
 # ---------------------------------------------------------------- triage ---
@@ -118,29 +115,7 @@ def action_node(state: TicketState) -> dict:
 
 # ----------------------------------------------------------- escalation ---
 def escalation_check_node(state: TicketState) -> dict:
-    reasons = []
-
-    if state.get("suspected_prompt_injection"):
-        reasons.append("suspected_prompt_injection")
-    if state.get("sentiment") in ANGRY_SENTIMENTS:
-        reasons.append("angry_sentiment")
-    if state.get("urgency") in CRITICAL_URGENCY:
-        reasons.append("critical_urgency")
-
-    refund_amount = state.get("refund_amount") or 0
-    if refund_amount and refund_amount > REFUND_AUTO_APPROVE_THRESHOLD:
-        reasons.append(f"refund_amount_{refund_amount}_over_threshold")
-
-    if state.get("escalation_reason"):
-        reasons.append(state["escalation_reason"])
-    if state.get("issue_type") in ("complaint", "other"):
-        reasons.append("ambiguous_issue_type")
-
-    return {
-        "requires_human": len(reasons) > 0,
-        "escalation_reason": "; ".join(reasons) if reasons else None,
-    }
-
+    return escalation_review(state)
 
 def route_after_escalation_check(state: TicketState) -> str:
     return "human_approval" if state.get("requires_human") else "resolve"
