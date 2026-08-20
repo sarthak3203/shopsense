@@ -95,3 +95,8 @@ def hybrid_search_policy(query_text: str, top_k: int = 5) -> list[dict]:
         {"score": r.score, "id": r.payload["id"], "category": r.payload["category"], "text": r.payload["text"]}
         for r in results
     ]
+
+
+def query_policy(query_text: str, top_k: int = 5) -> list[dict]:
+    """Backward-compatible M3 query API, backed by M4 hybrid retrieval."""
+    return hybrid_search_policy(query_text, top_k=top_k)

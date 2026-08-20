@@ -32,6 +32,11 @@ from src.memory_store import get_customer_context, record_ticket
 from src.policy_rag_agent import answer_policy_question
 from src.escalation_reviewer_agent import review as escalation_review
 from src.tracing import observe
+from src.guardrails import (
+    GuardrailViolation,
+    check_policy_answer_guardrail,
+    enforce_refund_guardrail,
+)
 
 
 # ---------------------------------------------------------------- triage ---
@@ -74,11 +79,25 @@ def route_after_triage(state: TicketState) -> str:
 def policy_check_node(state: TicketState) -> dict:
     query = state["ticket"].get("summary") or state["raw_text"]
     result = answer_policy_question(query)
+    guardrail = check_policy_answer_guardrail(result)
+    if not guardrail.allowed:
+        # Do not retain an unsafe policy answer in state where a future node
+        # could surface or rely on it. The escalation reviewer will require a
+        # human because escalation_reason is non-empty.
+        return {
+            "policy_answer": None,
+            "escalation_reason": f"policy_guardrail: {guardrail.reason}",
+        }
     return {"policy_answer": result}
 
 
 def route_after_policy(state: TicketState) -> str:
-    if state.get("issue_type") == "warranty_claim":
+    policy_answer = state.get("policy_answer") or {}
+    grounded_and_clean = policy_answer.get("grounded", False) and not policy_answer.get(
+        "unsupported_claims"
+    )
+
+    if state.get("issue_type") == "warranty_claim" and grounded_and_clean:
         return "action"
     return "escalation_check"
 
@@ -179,12 +198,23 @@ def resolve_node(state: TicketState) -> dict:
 
     if proposed_action == "refund" and order_id:
         try:
+            enforce_refund_guardrail(
+                amount=state.get("refund_amount"),
+                was_escalated=was_escalated,
+                human_decision=state.get("human_decision"),
+            )
             result = initiate_refund_or_replacement(
                 order_id=order_id,
                 action="refund",
                 amount=state.get("refund_amount"),
             )
             notes += f" — refund executed: {result}"
+        except GuardrailViolation as e:
+            notes += (
+                f" — refund BLOCKED by guardrail: {e}. Needs manual review. "
+                f"This should not be reachable if routing/escalation logic "
+                f"is correct — treat as a bug if it ever fires in production."
+            )
         except BackendUnavailableError as e:
             # Human already approved, but the backend is down at execution
             # time. Don't silently claim success -- record the failure

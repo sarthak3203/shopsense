@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { @apply box-border; }
+  body { @apply m-0 min-w-[320px] bg-[#f6f9ff] font-sans antialiased; }
+  button, input, select, textarea { font: inherit; }
+  button { @apply cursor-pointer; }
+  button:disabled { @apply cursor-not-allowed; }
+  ::selection { @apply bg-ice text-navy; }
+}
+
+@layer components {
+  .field { @apply block w-full rounded-md border border-navy/20 bg-white px-3 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-navy focus:ring-2 focus:ring-ice; }
+}

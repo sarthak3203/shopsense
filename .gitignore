@@ -1,4 +1,45 @@
+# ==========================================
+# Python virtual environments
+# ==========================================
 venv/
-.env
+.venv/
+env/
+
+# Python cache
 __pycache__/
-*.pyc
+*.py[cod]
+
+# Pytest cache
+.pytest_cache/
+
+# ==========================================
+# Environment variables / secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# Runtime databases
+# ==========================================
+shopsense_checkpoints.db
+
+# Local Qdrant vector database
+.qdrant_data/
+
+# Runtime/generated customer memory
+data/customer_memory.json
+
+# ==========================================
+# Frontend dependencies and build output
+# ==========================================
+frontend/node_modules/
+frontend/dist/
+
+# ==========================================
+# Optional IDE / OS files
+# ==========================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

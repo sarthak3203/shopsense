@@ -11,6 +11,8 @@ import os
 
 from dotenv import load_dotenv
 from litellm import completion
+from litellm.exceptions import RateLimitError
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from src.policy_index import hybrid_search_policy
 from src.reranker import rerank
@@ -35,7 +37,7 @@ def _generate_answer(query: str, chunks: list[dict]) -> str:
     )
     user_prompt = f"Policy excerpts:\n{context}\n\nQuestion: {query}"
 
-    response = completion(
+    response = _completion_with_rate_limit_retry(
         model=MODEL,
         messages=[
             {"role": "system", "content": system_prompt},
@@ -65,7 +67,7 @@ def _groundedness_check(query: str, answer: str, chunks: list[dict]) -> dict:
     )
     user_prompt = f"SOURCE EXCERPTS:\n{context}\n\nQUESTION: {query}\n\nANSWER:\n{answer}"
 
-    response = completion(
+    response = _completion_with_rate_limit_retry(
         model=MODEL,
         messages=[
             {"role": "system", "content": judge_prompt},
@@ -76,6 +78,16 @@ def _groundedness_check(query: str, answer: str, chunks: list[dict]) -> dict:
     content = response.choices[0].message.content.strip()
     content = content.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(content)
+
+
+@retry(
+    retry=retry_if_exception_type(RateLimitError),
+    stop=stop_after_attempt(5),
+    wait=wait_exponential(multiplier=2, min=2, max=20),
+    reraise=True,
+)
+def _completion_with_rate_limit_retry(**kwargs):
+    return completion(**kwargs)
 
 
 def answer_policy_question(query: str, top_k: int = 3) -> dict:
