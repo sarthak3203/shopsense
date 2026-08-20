@@ -79,6 +79,36 @@
         "issue_type": "shipping_status",
         "summary": "Auto-resolved",
         "recorded_at": "2026-08-19T06:19:17.059442+00:00"
+      },
+      {
+        "ticket_id": "TICK-100",
+        "issue_type": "order_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-19T15:49:28.799915+00:00"
+      },
+      {
+        "ticket_id": "TICK-101",
+        "issue_type": "order_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-19T15:49:56.688949+00:00"
+      },
+      {
+        "ticket_id": "TICK-102",
+        "issue_type": "order_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-19T15:50:16.672357+00:00"
+      },
+      {
+        "ticket_id": "TICK-103",
+        "issue_type": "order_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-19T15:52:46.438969+00:00"
+      },
+      {
+        "ticket_id": "TICK-101",
+        "issue_type": "order_status",
+        "summary": "Auto-resolved",
+        "recorded_at": "2026-08-19T16:05:04.972948+00:00"
       }
     ],
     "preferences": {}

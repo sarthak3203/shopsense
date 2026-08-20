@@ -1,14 +1,19 @@
 """
-Module 5 — LangGraph workflow.
+Module 5 — LangGraph workflow. Updated in M7 with:
+  - @observe() tracing on every node (Langfuse)
+  - action_node / resolve_node now call the resilient order_system_client
+    wrappers (retries + circuit breaker) instead of mock_apis directly,
+    and catch BackendUnavailableError to fall back to human escalation
+    instead of crashing the pipeline.
 
 triage -> [policy_check] -> action -> escalation_check -> [human_approval] -> resolve/reject
 
 Low-risk tickets (small/no refund, non-angry, non-critical, no injection flag,
-no eligibility problem) auto-resolve. High-refund, angry-sentiment, or
-ineligible-refund tickets pause at human_approval via interrupt() and require
-Command(resume=...) to continue. State is checkpointed via the caller-supplied
-checkpointer (SqliteSaver in production use, so a paused ticket survives a
-process restart).
+no eligibility problem, no backend outage) auto-resolve. High-refund,
+angry-sentiment, ineligible-refund, or order-system-unavailable tickets pause
+at human_approval via interrupt() and require Command(resume=...) to continue.
+State is checkpointed via the caller-supplied checkpointer (SqliteSaver in
+production use, so a paused ticket survives a process restart).
 """
 
 from langgraph.graph import StateGraph, END
@@ -16,18 +21,21 @@ from langgraph.types import interrupt
 
 from src.graph_state import TicketState
 from src.triage_agent import parse_ticket
-from src.mock_apis import (
+from src.order_system_client import (
     order_lookup,
     get_shipping_status,
     calculate_refund_amount,
     initiate_refund_or_replacement,
+    BackendUnavailableError,
 )
 from src.memory_store import get_customer_context, record_ticket
 from src.policy_rag_agent import answer_policy_question
 from src.escalation_reviewer_agent import review as escalation_review
+from src.tracing import observe
 
 
 # ---------------------------------------------------------------- triage ---
+@observe(name="triage_node")
 def triage_node(state: TicketState) -> dict:
     ticket = parse_ticket(
         ticket_id=state["ticket_id"],
@@ -62,6 +70,7 @@ def route_after_triage(state: TicketState) -> str:
 
 
 # ---------------------------------------------------------- policy check ---
+@observe(name="policy_check_node")
 def policy_check_node(state: TicketState) -> dict:
     query = state["ticket"].get("summary") or state["raw_text"]
     result = answer_policy_question(query)
@@ -75,6 +84,7 @@ def route_after_policy(state: TicketState) -> str:
 
 
 # ---------------------------------------------------------------- action ---
+@observe(name="action_node")
 def action_node(state: TicketState) -> dict:
     order_id = state.get("order_id")
     issue_type = state.get("issue_type")
@@ -82,46 +92,61 @@ def action_node(state: TicketState) -> dict:
     if not order_id:
         return {"proposed_action": "none", "escalation_reason": "no_order_id_found"}
 
-    if issue_type == "shipping_status":
-        return {"shipping_info": get_shipping_status(order_id), "proposed_action": "info_only"}
+    try:
+        if issue_type == "shipping_status":
+            return {"shipping_info": get_shipping_status(order_id), "proposed_action": "info_only"}
 
-    if issue_type == "order_status":
-        return {"order_info": order_lookup(order_id), "proposed_action": "info_only"}
+        if issue_type == "order_status":
+            return {"order_info": order_lookup(order_id), "proposed_action": "info_only"}
 
-    if issue_type in ("refund_request", "return_request", "warranty_claim"):
-        order_info = order_lookup(order_id)
-        refund_calc = calculate_refund_amount(order_id)
+        if issue_type in ("refund_request", "return_request", "warranty_claim"):
+            order_info = order_lookup(order_id)
+            refund_calc = calculate_refund_amount(order_id)
 
-        if not refund_calc.get("found"):
+            if not refund_calc.get("found"):
+                return {
+                    "order_info": order_info,
+                    "proposed_action": "none",
+                    "escalation_reason": refund_calc.get("error", "order_not_found"),
+                }
+
+            eligible = refund_calc.get("eligible", False)
+            amount = refund_calc.get("refund_amount", 0.0)
+            reason = refund_calc.get("reason", "")
+
             return {
                 "order_info": order_info,
-                "proposed_action": "none",
-                "escalation_reason": refund_calc.get("error", "order_not_found"),
+                "refund_amount": amount,
+                "proposed_action": "refund" if eligible else "none",
+                "escalation_reason": None if eligible else f"refund_ineligible: {reason}",
             }
 
-        eligible = refund_calc.get("eligible", False)
-        amount = refund_calc.get("refund_amount", 0.0)
-        reason = refund_calc.get("reason", "")
+        return {"proposed_action": "none"}
 
+    except BackendUnavailableError as e:
+        # Retries + circuit breaker (src/reliability.py) already exhausted
+        # inside order_system_client. Never crash the pipeline on a backend
+        # outage -- fall back to human review instead. escalation_review()
+        # already checks state["escalation_reason"] and will set
+        # requires_human=True because this reason is non-empty.
         return {
-            "order_info": order_info,
-            "refund_amount": amount,
-            "proposed_action": "refund" if eligible else "none",
-            "escalation_reason": None if eligible else f"refund_ineligible: {reason}",
+            "proposed_action": "none",
+            "escalation_reason": f"order_system_unavailable: {e}",
         }
-
-    return {"proposed_action": "none"}
 
 
 # ----------------------------------------------------------- escalation ---
+@observe(name="escalation_check_node")
 def escalation_check_node(state: TicketState) -> dict:
     return escalation_review(state)
+
 
 def route_after_escalation_check(state: TicketState) -> str:
     return "human_approval" if state.get("requires_human") else "resolve"
 
 
 # ------------------------------------------------------- human approval ---
+@observe(name="human_approval_node")
 def human_approval_node(state: TicketState) -> dict:
     decision = interrupt(
         {
@@ -145,6 +170,7 @@ def route_after_human_approval(state: TicketState) -> str:
 
 
 # -------------------------------------------------------------- resolve ---
+@observe(name="resolve_node")
 def resolve_node(state: TicketState) -> dict:
     order_id = state.get("order_id")
     proposed_action = state.get("proposed_action")
@@ -152,12 +178,21 @@ def resolve_node(state: TicketState) -> dict:
     notes = "Human-approved" if was_escalated else "Auto-resolved"
 
     if proposed_action == "refund" and order_id:
-        result = initiate_refund_or_replacement(
-            order_id=order_id,
-            action="refund",
-            amount=state.get("refund_amount"),
-        )
-        notes += f" — refund executed: {result}"
+        try:
+            result = initiate_refund_or_replacement(
+                order_id=order_id,
+                action="refund",
+                amount=state.get("refund_amount"),
+            )
+            notes += f" — refund executed: {result}"
+        except BackendUnavailableError as e:
+            # Human already approved, but the backend is down at execution
+            # time. Don't silently claim success -- record the failure
+            # clearly so it's picked up for manual follow-up.
+            notes += (
+                f" — refund execution FAILED (order system unavailable: {e}). "
+                f"Needs manual follow-up."
+            )
 
     record_ticket(
         state["customer_id"],
@@ -172,6 +207,7 @@ def resolve_node(state: TicketState) -> dict:
     }
 
 
+@observe(name="reject_node")
 def reject_node(state: TicketState) -> dict:
     decision = state.get("human_decision") or {}
     notes = f"Human rejected the proposed action. Note: {decision.get('note', '')}"
